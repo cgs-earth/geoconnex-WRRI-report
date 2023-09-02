@@ -12,8 +12,10 @@ embed-resources: true
 anchor-sections: true
 link-external-newwindow: true
 format: 
-  html: default
-  docx: default
+  html: 
+    number-sections: true
+  docx: 
+    number-sections: true
   pdf: 
     documentclass: article
     number-sections: true
@@ -24,8 +26,6 @@ format:
 ## Purpose
 
 The purpose of this report is to document the activities, outputs, and outcomes of the NCSU Water Resources Research Institute award for the "Internet of Water: Research and Development toward a linked data system and foundational knowledge network for the Internet of Water". The linked data system and foundational knowledge network, named Geoconnex, was conceptualized as an operationalization of the Open Geospatial Consortium Environmental Linked Features Interoperability Experiments for the United States in the domains of water science and management. The outcomes include a performant infrastructure leveraging semantic technology and open, modern API standards that allow data providers to independently publish metadata on the web in a manner that results in their data becoming linked to other providers' data where spatially, hydrologically, and topically relevant. If adopted by data providers at wide scale, this would enable much improved discoverability of water-related datasets. Further work is needed to encourage participation in the system and use of the infrastructure. Potential future work could also establish best practices to use the same technologies to enable the automatic translation of observation and model data across data systems, fostering improved interoperability of data in addition tot he improved discoverability already enabled by the currently implemented infrastructure.
-
-## Executive Summary
 
 ## Introduction
 
@@ -62,7 +62,7 @@ To address this challenge, the Internet of Water is seeking to establish a colla
 
 The technical approach taken in this project leverages prior work, including:
 
-1.  The Second Environmental Linked Features Interoperability Experiment (\[SELFIE\])(http://www.opengis.net/doc/PER/SELFIE-ER), which conceptualized a web architecture consisting of persistent identifiers for real-world water features of interest that direct to landing pages with structured metadata that includes links to data relevant to the given feature of interest.
+1.  The Second Environmental Linked Features Interoperability Experiment ([SELFIE](http://www.opengis.net/doc/PER/SELFIE-ER)), which conceptualized a web architecture consisting of persistent identifiers for real-world water features of interest that direct to landing pages with structured metadata that includes links to data relevant to the given feature of interest.
 
 2.  [W3C Web standards and best practices](https://www.w3.org/standards/), including for [data on the web](https://www.w3.org/TR/dwbp/) and [spatial data on the web](https://www.w3.org/TR/sdw-bp/)
 
@@ -89,9 +89,10 @@ The rest of the report is organized as follows:
 
 [Use Cases](#sec-use-cases) describe the general data discovery and publication use cases, and domain use cases that were developed and how they were addressed by Geoconnex implementation efforts.
 
+[Governance](#sec-use-cases) describe the general data discovery and publication use cases, and domain use cases that were developed and how they were addressed by Geoconnex implementation efforts.
 
 
-## Glossary {#sec-glossary}
+## Glossary {#sec-governance}
 
 API
 
@@ -175,7 +176,6 @@ URL
 
 :   Uniform Resource Locator, or web address for any kind of web resource. Within Geoconnex, URLs are distinguished from URIs in that URLs point to or perhaps identify information resources, but not NIRs/real-world objects. URIs identify NIRs but direct to web resources that have information about NIRs.
 
-
 ## User Research and Engagement {#sec-engagement}
 
 ### Outreach through Internet of Water network
@@ -186,11 +186,13 @@ URL
 
 ## Architecture and Implementation of Geoconnex Linked Data System {#sec-arch}
 
+All code associated with the architecture is navigable from the GitHub Geoconnex Directory Repository at <https://github.com/internetofwater/about.geoconnex.us>
+
 ### Content Model
 
 The overall content model in this project is derived from the concept proposed in SELFIE (see @fig-f1), which applied W3C Data on the Web Best Practices to environmental data use cases.
 
-![Geoconnex Architecture Diagram](images/fig2.svg){#fig-f1}
+![Content Model, derivice from SELFIE Engineering Report](images/fig2.png){#fig-f1}
 
 Non-information Resources (NIR) are real-world features such as rivers, wells, dams, lakes, public water systems, conduits, etc. NIR are to be identified by HTTP(s) URIs, which are strings of characters that are formatted like URLs (web addresses). For example, the Hoover Dam would have a URI of <https://geoconnex.us/ref/dams/1080095>. These URIs, when entered into a web browser, are to redirect to a URL where there is **Landing Content** including some structured metadata about the feature the URL identifies in the form of embedded JSON-LD, which makes the metadata machine-readable and interoperable with similarly published metadata. This **Landing Content** then includes links to **Data Content**, which can be any web-accessible structured and unstructured data about a URI. Data content might similarly have a JSON-LD version for maximum interoperability, but could simply be data in any format available at a URL.
 
@@ -264,8 +266,7 @@ The overall architecture of the system as currently implemented is illustrated i
 
 ![Geoconnex Architecture Diagram](images/fig1.png){#fig-f2}
 
-
-### Persistent Identifier Service
+### Persistent Identifier Service {#sec-registry}
 
 The persistent identifier (PID) service consists of a **registry**[^1] and a **resolver**.
 
@@ -285,15 +286,17 @@ For organizations that have more than 300,000 locations, GitHub cannot support t
 
 **Resolver** (pids.geoconnex.us)
 
-The resolver is a customized fork of the open-source [YOURLS](https://yourls.org) URL shortener. The code for the Geoconnex implementation is available from <https://github.com/internetofwater/pids.geoconnex.us>. YOURLS is written in PHP and interfaces with a MySQL database, and was chosen because of its highly extensible plugin framework. Multiple plugins were developed to give YOURLS necessary capabilities for Geoconnex including: a bulk importer, a regex PID resolver, a filetype forwarder, and a connector to serverless cloud databases.
+The resolver is a customized fork of the open-source [YOURLS](https://yourls.org) URL shortener. The code for the Geoconnex implementation is available from <https://github.com/internetofwater/pids.geoconnex.us>. YOURLS is written in PHP and interfaces with a MySQL database, and was chosen because of its highly extensible plugin framework. Multiple plugins were developed (**under non-WRRI funding**) to give YOURLS necessary capabilities for Geoconnex including: a bulk importer, a regex PID resolver, a filetype forwarder, and a connector to serverless cloud databases.
 
 #### Performance and future work
 
-The registry is adequate technically, however there are two areas for improvement. First, some data providers are unfamiliar with GitHub or regular expressions, and others find the process of contributing to PIDs via GitHub pull requests to be cumbersome and insufficiently automate-able. Future work should investigate the feasibility of both a more user-friendly dedicated user interface, and the possibility of allowing access to an API to request and verify the minting of PIDs. Second, contributors of regex PIDs nevertheless need a consistent way to provide a comprehensive list of every URL to the Geoconnex system so that they can be crawled. Specific guidance for creating and submitting self-hosted, or alternatively hosted sitemap.xml files will be necessary to develop.
+The registry is now adequate technically, however there are two areas for improvement. First, some data providers are unfamiliar with GitHub or regular expressions, and others find the process of contributing to PIDs via GitHub pull requests to be cumbersome and insufficiently automate-able. Future work should investigate the feasibility of both a more user-friendly dedicated user interface, and the possibility of allowing access to an API to request and verify the minting of PIDs. Second, contributors of regex PIDs nevertheless need a consistent way to provide a comprehensive list of every URL to the Geoconnex system so that they can be crawled. Specific guidance for creating and submitting self-hosted, or alternatively hosted sitemap.xml files will be necessary to develop.
 
-### Reference Feature Server (reference.geoconnex.us)
+The resolver was initially inadequate to serve redirects to landing resources at scale while the Aggregator was actively retrieving all resources from PIDs in <https://geoconnex.us/sitemap.xml>, with resolution times in the 1-second range and an error rate of ~5%. To address this, replica persistent identifier databases were set up, each with its own autoscaling, load-balanced redirect server container. This cut resolution times to less than 50ms on average and the error rate to less than 0.1% during aggregator runs. In anticipation of increased usage in the future, the resolver was also put behind Cloudfront, the Amazon Web Services global Content Delivery Network, which caches requests and reduces the load on both the persistent identifier resolver and any servers that provide landing content at the redirected URLs.
 
-The reference feature server (<https://reference.geoconnex.us>) provides an OGC-API features endpoint implemented using the open-source python server [pygeoapi](https://pygeoapi.io). A key contribution the Geoconnex project made to pygeoapi was the capability to add JSON-LD templates to the server's responses for individual items, allowing for completely customized JSON-LD formats for different types of source data. For example, the reference gage URI <https://geoconnex.us/ref/gages/1000012> points to <https://reference.geoconnex.us/collections/gages/items/1000012>, the OGC-API endpoint for that feature. Computer programs can be written to retrieve the HTML (web browser default), geoJSON, or JSON-LD versions of this feature. It includes basic attributes for hydrographic addressing, including the NHDPlusV2 reachcode and measure as well as the relevant mainstem. JSON-LD templating allows the JSON-LD output to conform with the relevant OGC surface hydrology conceptual model HY_Features to allow for intepretation of these attributes in a hydrologically meaningful way:
+### Reference Feature Server (reference.geoconnex.us) {#sec-reference}
+
+The reference feature server (<https://reference.geoconnex.us>) provides an OGC-API features endpoint implemented using the open-source python server [pygeoapi](https://pygeoapi.io). A key contribution the Geoconnex project (under **non-WRRI funding** ) made to pygeoapi was the [capability to add JSON-LD templates](https://github.com/geopython/pygeoapi/pull/868) to the server's responses for individual items, allowing for completely customized JSON-LD formats for different types of source data. For example, the reference gage URI <https://geoconnex.us/ref/gages/1000012> points to <https://reference.geoconnex.us/collections/gages/items/1000012>, the OGC-API endpoint for that feature. Computer programs can be written to retrieve the HTML (web browser default), geoJSON, or JSON-LD versions of this feature. It includes basic attributes for hydrographic addressing, including the NHDPlusV2 reachcode and measure as well as the relevant mainstem. JSON-LD templating allows the JSON-LD output to conform with the relevant OGC surface hydrology conceptual model HY_Features to allow for intepretation of these attributes in a hydrologically meaningful way:
 
 ``` json
  "hyf:referencedPosition":[
@@ -330,26 +333,40 @@ The reference feature server's collections are imagined to be thematic collectio
 
 Technically, the reference feature server performs well at scale. For example, USGS Web Communications Branch staff crawled the entire mainstems feature collection to add mainstem identifiers to the USGS SensorThings API instance, and the Geoconnex crawler can similarly crawl every individual item across all collections without sacrificing performance for other users. Future work should focus on fostering a community of practice that can take responsibility for curating additional reference feature collections (e.g. for wells, lakes, wetlands, conduits, aquatic barriers) and maintaining all collections over time as the water data community is made aware of new data sources.
 
-### Organizational Web Content
+### Organizational Web Content {#sec-webcont}
 
 Organizational Landing and Data content was fostered using a number of strategies. Direct engagement (see @sec-engagement) with data providers including USGS Water Mission Area Web Communications Branch, the [US Bureau of Reclamation RISE](https://data.usbr.gov) system, the [New Mexico Water Data Initiative (NMWDI)](https://newmexicowaterdata.org), the [California State Water Resources Control Board (SWRCB)](https://www.waterboards.ca.gov), the Texas Water Development Board's [Texas Water Data Hub](https://txwaterdatahub.org) project, the Western States Water Council [Water Data Exchange (WaDE) system](https://westdaat.westernstateswater.org), and the Oak Ridge National Laboratory [HydroSource](https://hydrosource.ornl.gov) data catalog were pursued. The following activities resulted:
 
-- PIDs were minted for relevant USGS resources that were already published, such as the monitoring location pages. 
+-   PIDs were minted for relevant USGS resources that were already published, such as the monitoring location pages.
 
-- USBR RISE implemented location-based HTML landing content (e.g. <https://data.usbr.gov/location/314>) but is still in the process of implementing embedded JSON-LD as of the writing of this report. 
+-   USBR RISE implemented location-based HTML landing content (e.g. <https://data.usbr.gov/location/314>) but is still in the process of implementing embedded JSON-LD as of the writing of this report.
 
-- The New Mexico Water Data Initiative's primary data access mode is a number of [OGC SensorThings API (STA)](https://www.ogc.org/standard/sensorthings/) endpoints. To support their publication of landing content, this project implemented an [STA provider](https://docs.pygeoapi.io/en/latest/data-publishing/ogcapi-features.html#sensorthings-api) for pygeoapi, and assisted NMWDI in deploying it. Thus, NMWDI PIDs (e.g. <https://geoconnex.us/nmwdi/st/locations/4108>) direct to a pygeoapi-implemented OGC-API Features endpoint which includes JSON-LD, which includes semantic links to data content from the STA endpoint.
+-   The New Mexico Water Data Initiative's primary data access mode is a number of [OGC SensorThings API (STA)](https://www.ogc.org/standard/sensorthings/) endpoints. To support their publication of landing content, this project implemented an [STA provider](https://docs.pygeoapi.io/en/latest/data-publishing/ogcapi-features.html#sensorthings-api) for pygeoapi, and assisted NMWDI in deploying it. Thus, NMWDI PIDs (e.g. <https://geoconnex.us/nmwdi/st/locations/4108>) direct to a pygeoapi-implemented OGC-API Features endpoint which includes JSON-LD, which includes semantic links to data content from the STA endpoint.
 
-- The SWRCB and HydroSource platforms rely on ESRI ArcGIS REST services to publish geospatial data and had no other easy framework to implement location-based landing content. An [ArcGIS REST service provider](https://docs.pygeoapi.io/en/latest/data-publishing/ogcapi-features.html#esri-feature-service) for pygeoapi OGC-API Features was thus implemented. HydroSource is in the process of implementing semantic landing content at <https://hydrosource-features.ornl.gov> as of the writing of this report. The SWRCB minted PIDs for a streamgage catalog that was also inorporated into the reference gages layer, and is currently represented on CGS infrastructure at <https://sb19.linked-data.internetofwater.dev>. 
+-   The SWRCB and HydroSource platforms rely on ESRI ArcGIS REST services to publish geospatial data and had no other easy framework to implement location-based landing content. An [ArcGIS REST service provider](https://docs.pygeoapi.io/en/latest/data-publishing/ogcapi-features.html#esri-feature-service) for pygeoapi OGC-API Features was thus implemented. HydroSource is in the process of implementing semantic landing content at <https://hydrosource-features.ornl.gov> as of the writing of this report. The SWRCB minted PIDs for a streamgage catalog that was also inorporated into the reference gages layer, and is currently represented on CGS infrastructure at <https://sb19.linked-data.internetofwater.dev>.
 
-- The Texas Water Data Hub is implementing the open-source [CKAN](https://ckan.org) as its primary data catalog and the CKAN datastore and API as its primary data service, and is in the process of implementing dataset-oriented content on the data resources pages, and investigating how to leverage the platform to serve location-oriented landing content. In support of potential organizations that use CKAN and the similar proprietary Socrata platform as data services, [providers](https://docs.pygeoapi.io/en/stable/data-publishing/ogcapi-features.html#socrata) for both APIs for pygeoapi OGC-API Features were implemented.
+-   The Texas Water Data Hub is implementing the open-source [CKAN](https://ckan.org) as its primary data catalog and the CKAN datastore and API as its primary data service, and is in the process of implementing dataset-oriented content on the data resources pages, and investigating how to leverage the platform to serve location-oriented landing content. In support of potential organizations that use CKAN and the similar proprietary Socrata platform as data services, [providers](https://docs.pygeoapi.io/en/stable/data-publishing/ogcapi-features.html#socrata) for both APIs for pygeoapi OGC-API Features were implemented.
 
-- The WaDE platform uses Mapbox and a custom database to deliver data services regarding more than 1 million points of water diversion and use across 17 western states. While the WaDE team has implemented template-based dynamic HTML/JSON-lD landing content, and minted Geoconnex persistent identifiers for each of WaDE's locations (e.g. <https://geoconnex.us/wade/sites/MTwr_SPOD437023>), crawling the pages incurred undesirable data egress charges for WaDE. As an alternative approach, the creation of a bulk JSON-LD graph of all WaDE's metadata content was piloted. It was able to be ingested into the triple store manually and via Gleaner with a custom sitemap entry for the entire graph file. 
+-   The WaDE platform uses Mapbox and a custom database to deliver data services regarding more than 1 million points of water diversion and use across 17 western states. While the WaDE team has implemented template-based dynamic HTML/JSON-lD landing content, and minted Geoconnex persistent identifiers for each of WaDE's locations (e.g. <https://geoconnex.us/wade/sites/MTwr_SPOD437023>), crawling the pages incurred undesirable data egress charges for WaDE. As an alternative approach, the creation of a bulk JSON-LD graph of all WaDE's metadata content was piloted. It was able to be ingested into the triple store manually and via Gleaner with a custom sitemap entry for the entire graph file.
+
+### Author Guidance
+
+Throughout engagement regarding [organizational web content](#sec-webcont), guidance for how to format and publish JSON-LD was iterated on an ad-hoc basis and synthesized over time. Documentation specific for Geoconnex data providers-as-web content authors is ongoing at <https://docs.geoconnex.us>. A coherent, minimum set of guidance for JSON-LD content which emphasizes <https://schema.org> and iterates on [science-on-schema.org](https://science-on-schema.org) is available at <https://geoconnex.us/iow/guidance>.
+
+#### Performance and future work
+
+It was found that uptake is far more likely when JSON-LD requirements are as parsimonious as possible and reduce reliance on ontologies and vocabularies other than <https://schema.org>, which web developers are familiar with and which has robust documentation. For example, attempts to rigorously implement patterns from the [Semantic Sensor Network](https://www.w3.org/TR/vocab-ssn/) ontology found that the concepts therein, especially around Sensors, Procedures, Platforms, Deployments, and Samplings were difficult to consistently apply to the metadata that was easily available for publication from participating source data systems. Nevertheless, it was found that properties from HY_Features, GeoSPARQL, and [QUDT](https://www.qudt.org) were absolutely necessary, and properties from the [Observations Data Model 2 (ODM2) Vocabularies](http://voacbulary.odm2.org) were useful in most cases. It is plausible that more user-friendly publication and documentation of domain models would enable greater degrees of standardization. Domain models and authoritative or community vocabularies that need to be published with resolvable URIs and accessible documentation and search interfaces include:
+
+* groundwater features
+* water quality and quantity regulatory concepts (e.g. action and enforcement thresholds, beneficial use categories, water rights allocations and priorities)
+* quantity kinds and parameters
+* environmental observation and model methods
+* infrastructure properties (e.g. dams, reservoirs) and anthropogenic hydrology (e.g. conduits, culverts, levees)
 
 
 ### Aggregator service
 
-The aggregator services deploys the open source softwares [Gleaner](https://gleaner.io) and [Nabu](https://github.com/gleanerio/nabu/blob/master/docs/README.md) which were developed initially for NSF’s [EarthCube](https://www.nsf.gov/geo/earthcube/). The activity flow is shown in @fig-f5.
+The aggregator services deploys the open source softwares [Gleaner](https://gleaner.io) and [Nabu](https://github.com/gleanerio/nabu/blob/master/docs/README.md) which were developed initially for NSF's [EarthCube](https://www.nsf.gov/geo/earthcube/). The activity flow is shown in @fig-f5.
 
 ![Geoconnex Architecture Diagram](images/fig5.png){#fig-f5}
 
@@ -357,36 +374,150 @@ Gleaner is configured against one or more web-accessible `sitemap.xml` files, an
 
 Nabu performs two functions:
 
-1. loads the JSON-LD documents into a triple store, which in this case is an instance of [GraphDB](https://graphdb.ontotext.com) with a free license (see @sec-graph for further elaboration on the function and performance of GraphDB).
+1.  loads the JSON-LD documents into a triple store, which in this case is an instance of [GraphDB](https://graphdb.ontotext.com) with a free license (see @sec-kg for further elaboration on the function and performance of GraphDB).
 
-2. loads the JSON-LD documents into a free text index of the JSON-LD documents, which provides a way to quickly retrieve relevant URIs based on free text search, for referral to a knowledge graph for more semantic queries.
-
+2.  loads the JSON-LD documents into a free text index of the JSON-LD documents, which provides a way to quickly retrieve relevant URIs based on free text search, for referral to a knowledge graph for more semantic queries.
 
 #### Performance and future work
 
-Gleaner and Nabu were demonstrated to successfully harvest JSON-LD and load them into the triple store. The initial deployment deployed all components of the aggregator service in a single docker-compose framework on a single virtuam machine. This deployment experienced upper limit on the number of resources crawled due to the memory allocatable to the S3 data store within the framework. This was resolved by reconfiguring Gleaner and Nabu to work with a serverless S3 infrastructure (in this case, Google Cloud Storage). To fulfill two key functions of public data access and data versioning, a third capability should be finalized with Nabu: to concatenate the JSON-LD documents from a given sitemap or namespace into a single, versioned and timestamped RDF release graph for archiving and download at a publicly accessible S3-compliant object store bucket. 
+Gleaner and Nabu were demonstrated to successfully harvest JSON-LD and load them into the triple store. The initial deployment deployed all components of the aggregator service in a single docker-compose framework on a single virtuam machine. This deployment experienced upper limit on the number of resources crawled due to the memory allocatable to the S3 data store within the framework. This was resolved by reconfiguring Gleaner and Nabu to work with a serverless S3 infrastructure (in this case, Google Cloud Storage). To fulfill two key functions of public data access and data versioning, a third capability should be finalized with Nabu: to concatenate the JSON-LD documents from a given sitemap or namespace into a single, versioned and timestamped RDF release graph for archiving and download at a publicly accessible S3-compliant object store bucket.
 
 ### Knowledge Graph/ Triple Store {#sec-kg}
 
-The knowledge graph is primarily instantiated as an RDF triple store, in this case using GraphDB. GraphDB, though proprietary software, implements all data interfaces with open standards, including SPARQL and RDF4J. GraphDB was chosen over available open source triple stores due to it support for GeoSPARQL inference and query operations. GraphDB's RDF4J REST API includes a SPARQL query endpoint that can be used in a read-only mode for public access. In addition, this endpoint was demonstrated to be a practical back end to OGC-API Features endpoints delivering GeoJSON and HTML output for simple SPARQL queries, as implemented in a [custom SPARQL provider for pygeoapi](https://github.com/cgs-earth/pygeoapi-plugins/blob/master/pygeoapi_plugins/provider/sparql.py).
+The knowledge graph is primarily instantiated as an RDF triple store, in this case using GraphDB. GraphDB, though proprietary software, implements all data interfaces with open standards, including SPARQL and RDF4J. GraphDB was chosen over available open source triple stores due to it support for GeoSPARQL inference and query operations. GraphDB's RDF4J REST API includes a SPARQL query endpoint that can be used in a read-only mode for public access. <https://graph.geoconnex.us/repositories/iow> is the service endpoint for both GET and POST SPARQL queries. In addition, this endpoint was demonstrated to be a practical back end to OGC-API Features endpoints delivering GeoJSON and HTML output for simple SPARQL queries, as implemented in a [custom SPARQL provider for pygeoapi](https://github.com/cgs-earth/pygeoapi-plugins/blob/master/pygeoapi_plugins/provider/sparql.py).
 
-#### Performance and future work
+#### Performance and future work {#sec-kg-performance}
 
-GraphDB is a capable enterprise-grade triple store and can process SPARQL and GeoSPARQL transactions to update and query data. However, at the imagined scale of Geoconnex if widely used and adopted, including many simultaneous, asynchronous queries integrated into major high-traffic Federal and State data systems, a more robust architecture including database replicas with failover protection will need to be investigated and costed. 
+GraphDB is a capable enterprise-grade triple store and can process SPARQL and GeoSPARQL transactions to update and query data. However, at the imagined scale of Geoconnex if widely used and adopted, including many simultaneous, asynchronous queries integrated into major high-traffic Federal and State data systems, a more robust architecture including database replicas with failover protection will need to be investigated and costed.
 
-In addition, the vast majority of even highly technical water data analysts are not familiar with SPARQL and should not anticipate
+In addition, the vast majority of even highly technically skilled water data analysts are not familiar with SPARQL. More traditional RESTful API entrypoints to the knowledge graph should be investigated. One approach would be to investigate several common SPARQL property paths that address key use cases, and implement them at the reference feature OGC-API Features endpoints. For example, the Reference Gages layer could be configured to include an attribute which on the back end is a response to SPARQL query that returns URIs, names, and geometries for all reference gages that are indexed to the same mainstem river:
+
+``` sparql
+PREFIX hyf: <https://www.opengis.net/def/schema/hy_features/hyf/>
+PREFIX schema: <https://schema.org/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+select DISTINCT ?mainstem ?gage ?gagename ?streamname ?provider ?gwkt ?mswkt where {
+    <https://geoconnex.us/ref/gages/1118104> hyf:referencedPosition ?rp .
+    ?rp hyf:HY_IndirectPosition ?ip .
+    ?ip hyf:linearElement ?mainstem .
+    BIND (<https://geoconnex.us/ref/mainstems/29559> as ?target)
+    ?gage hyf:referencedPosition ?rp2 .
+    ?rp2 hyf:HY_IndirectPosition ?ip2.
+    ?ip2 hyf:linearElement <https://geoconnex.us/ref/mainstems/1> .
+    <https://geoconnex.us/ref/mainstems/1> schema:name ?streamname .
+    ?gage geo:hasGeometry ?ggeom .
+    ?gage schema:name ?gagename .
+    ?gage schema:provider ?provider .
+    ?ggeom geo:asWKT ?gwkt
+        }
+```
+
+The resulting GeoJSON response for that gage from <https://reference.geoconnex.us/collections/gages/items/1118104> could then be:
+
+``` json
+{
+    "type":"Feature",
+    "properties":{
+        "uri":"https://geoconnex.us/ref/gages/1118104",
+        "description":"USGS NWIS Stream/River/Lake Site 05451910: Iowa River at Chelsea, Iowa",
+        "provider":"https://waterdata.usgs.gov",
+        "provider_id":"05451910",
+        "nhdpv2_reach_measure":30.648,
+        "mainstem_uri":"https://geoconnex.us/ref/mainstems/324976",
+        "fid":120134,
+        "name":"Iowa River at Chelsea, Iowa",
+        "subjectof":"https://waterdata.usgs.gov/monitoring-location/05451910",
+        "nhdpv2_reachcode":"07080208000193",
+        "nhdpv2_comid":17541869.0,
+        "gages_same_mainstem":[
+        {
+            "uri":"The landing page of this server as JSON",
+            "name":"Mill Race at Amana, IA",
+            "latitude":41.79611839,
+            "longitude": -91.86517779
+        },
+        {
+            "uri":"https://geoconnex.us/ref/gages/1017821",
+            "name":"Iowa River at Columbus Junction, IA",
+            "latitude": 41.27835889,
+            "longitude": -91.3468216
+        }
+    ]
+    },
+    "id":"1100229",
+    "geometry":{
+        "type":"Point",
+        "coordinates":[
+            -106.7075374,
+            39.8894315
+        ]
+    }
+}
+```
+
+Another approach would be to implement a number of OGC-API Processes which implement common graph queries using a constrained set of query parameters.
+
+### Usage statistics
+
+The following data sources were investigated to track and provide usage statistics for community linked data resources
+
+* Google Search Console 
+* CDN access logs
+* PID server logs
+* Reference feature server logs
+* Google Search Console
+
+
+
 
 ## Use Cases
 
-General use case:
+Below both a highly general use case is described, as well as a specific use case involving the discovery and integration of hydrologically related observed and modeled data.
 
-#### 
+### General use case 
 
-#### Discovering and Distinguishing Hydrologically Relevant Observed and Modeled Datasets
+The general geoconnex use case is essentially the same as the "Internet of Water" use case articulated in Internet of Water Aspen Institute Report^[https://www.aspeninstitute.org/publications/internet-of-water/] and summarized in the SELFIE Engineering Report^[<https://docs.ogc.org/per/20-067.html#_us_internet_of_water_distributed_data_and_observations>]. 
 
-##### Stream stage
+#### User Story
+As a user of water data, I need to discover and access water information relevant to the environmental feature I care about from all the organizations that hold data about it, so I don’t have to have special knowledge to access some information and so I don’t miss some potentially relevant information.^[Reproduced from the [SELFIE engineering report](https://docs.ogc.org/per/20-067.html#_user_story)]
 
-##### 
+#### Datasets and sources
+
+* USGS Reference Hydrography
+
+* State and local data and observations
+
+* University consortia aggregated data services
+
+* Federal aggregated data and services
+
+* Nongovernmental aggregated data and services
+
+
+#### Conceptual Demonstration and next steps
+
+The Geoconnex system is ultimately designed to meet this highly general use case. The overall architecture envisions a federated system of data producers that all participate by publishing landing content that references [Community Reference Features](#sec-reference), and registering URIs and/or PIDS for that content with the [persistent identifier registry](#sec-registry). The combined landing content can then be organized into a [knowledge graph](#sec-kg) that is made publicly accessible. Diverse data discovery workflows can be accommodated via SPARQL query to the knowledge graph or instantiated via SQL-enabled data stores or tabular and geospatial data files created from the knowledge graph. 
+
+A simple example of discovering streamgages from all participating organizations that monitor a specific river was elaborated in @sec-kg-performance. A visual representation of that example is available a [web application](https://gis.cgs.earth/portal/apps/opsdashboard/index.html#/0e113bea7c0542c18adef00d910c330e?URI_calc=324976)
+
+At this point, the technical baseline has been established. Reasonable next steps might include:
+
+* incorporating next-generation USGS hydrography products (e.g. 3DHP mainstems) into reference feature collections
+* creating and publishing domain models for specific feature types (e.g. anthropogenic water features)
+* scaling participation in the system from data providers through targeted implementation of domain use cases that actively use the Geoconnex infrastructure
+* creating institutional mechanisms to steward reference feature collections
+
+
+### Discovering, Distinguishing, and Integrating Hydrologically Relevant Observed and Modeled Datasets
+
+#### Description
+
+#### User Story
+
+#### Conceptual Demonstration
+
+
 
 ## Governance {#sec-governance}
 
