@@ -337,9 +337,9 @@ The reference feature server (<https://reference.geoconnex.us>) provides an OGC-
     ]
 ```
 
-Reference feature collections can searched via the OGC-API Features standard, including the [Common Query Language](https://portal.ogc.org/files/96288) filters, including by bounding box, polygon, datetime, or attribute to aid in discovery of the most relevant features to a data provider's data for tagging and metadata management, or to a data user's use case.
+Reference feature collections can searched via the OGC-API Features standard, including the [Common Query Language](https://portal.ogc.org/files/96288) filters for bounding box, polygon, datetime, or attribute to aid in discovery of the most relevant features to a data provider's data for tagging and metadata management, or to a data user's use case.
 
-The reference feature server's collections are imagined to be thematic collections of nation-scale common features that many organizations publish data about, and that are managed by a community process that needs to be developed further (see [Governance section](#sec-governance). The source datasets are available for bulk download with an open license from HydroShare.[^2] For the purposes of this project, reference features were curated by USGS and CGS staff. USGS staff curated reference feature sets for HUCs, mainstems, gages, aquifers, hydrogeologic units, and dams. CGS staff curated reference feature sets for Census geographies and public water systems.
+The reference feature server's collections are imagined to be thematic collections of nation-scale common features that many organizations publish data about, and that are managed by a community process that needs to be developed further (see [Governance section](#sec-governance)). The source datasets are available for bulk download with an open license from HydroShare.[^2] For the purposes of this project, reference features were curated by USGS and CGS staff. USGS staff curated reference feature collections for HUCs, mainstems, gages, aquifers, hydrogeologic units, and dams. CGS staff curated reference feature collections for Census geographies and public water systems.
 
 [^2]: <https://www.hydroshare.org/resource/3295a17b4cc24d34bd6a5c5aaf753c50/>
 
@@ -847,7 +847,7 @@ From November 2022 to June 2023, the team engaged Federal, state, tribal, local,
 -   Establish location metadata requirements for key data sets, including but not limited to: surface and groundwater monitoring water use and diversion locations; hydrologic cataloging features, e.g. watershed boundaries, HUCs, aquifers, interface with coastal data, administrative boundaries for PWS and irrigation districts, groundwater management areas, conservation districts, census data, federal regions for EPA, USGS, USBR, USACE, NOAA, and other agencies.
 -   Create and oversee a data submission process: Review system for structural bias and other questions related to diversity, equity and inclusion (DEI), in collaboration with external groups. Encourage participation in the system.
 
-To validate these requirements and inform a draft governance plan, survey of technical experts and Geoconnex superusers identified through the Internet of Water Coalition, followed by a virtual convening of the IoW Coalition's Geoconnex Working Group. This feedback was synthesized into a proposed governance plan to help guide future work to ensure that the Geoconnex system serves the needs of the Internet of Water community.
+To validate these requirements and inform a draft governance plan, a survey of technical experts and Geoconnex superusers identified through the Internet of Water Coalition, followed by a virtual convening of the IoW Coalition's Geoconnex Working Group was conducted. This feedback was synthesized into a proposed governance plan to help guide future work to ensure that the Geoconnex system serves the needs of the Internet of Water community.
 
 #### Survey Questions and Results
 
