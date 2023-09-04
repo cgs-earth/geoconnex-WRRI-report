@@ -89,9 +89,9 @@ The rest of the report is organized as follows:
 
 [Architecture and Implementation of Geoconnex Linked Data System](#sec-arch) provides an overview of the implemented infrastructure components and summarizes their current performance and recommended future work.
 
-[Use Cases](#sec-use-cases) describe the general data discovery and publication use cases, and domain use cases that were developed and how they were addressed by Geoconnex implementation efforts.
+[Use Cases](#sec-use-cases) describes the general data discovery and publication use cases, and domain use cases that were developed and how they were addressed by Geoconnex implementation efforts.
 
-[Governance](#sec-use-cases) describe the general data discovery and publication use cases, and domain use cases that were developed and how they were addressed by Geoconnex implementation efforts.
+[Governance](#sec-use-cases) describes the general data discovery and publication use cases, and domain use cases that were developed and how they were addressed by Geoconnex implementation efforts.
 
 
 ## Glossary {#sec-governance}
@@ -304,7 +304,7 @@ The resolver is a customized fork of the open-source [YOURLS](https://yourls.org
 
 #### Performance and future work
 
-The registry is now adequate technically, however there are two areas for improvement. First, some data providers are unfamiliar with GitHub or regular expressions, and others find the process of contributing to PIDs via GitHub pull requests to be cumbersome and insufficiently automate-able. Future work should investigate the feasibility of both a more user-friendly dedicated user interface, and the possibility of allowing access to an API to request and verify the minting of PIDs. Second, contributors of regex PIDs nevertheless need a consistent way to provide a comprehensive list of every URL to the Geoconnex system so that they can be crawled. Specific guidance for creating and submitting self-hosted, or alternatively hosted sitemap.xml files will be necessary to develop.
+The registry is now adequate technically, however there are two areas for improvement. First, some data providers are unfamiliar with GitHub or regular expressions, and others find the process of contributing to PIDs via GitHub pull requests to be cumbersome and insufficiently automate-able. Future work should investigate the feasibility of both a more user-friendly dedicated user interface, and the possibility of allowing access to an API to request and verify the minting of PIDs. Second, contributors of regex PIDs nevertheless need a consistent way to provide a comprehensive list of every URL to the Geoconnex system so that they can be crawled. Specific guidance for creating and submitting self-hosted, or alternatively hosted sitemap.xml files will be necessary to develop. This is related to an issue that guidance for submitting dataset URIs or URLs, in addition to PIDs for specific locations may be necessary to develop so that the Geoconnex system can crawl dataset metadata that include Geoconnex references in addition to URIs for real-world features that are registered. Thus, a parallel “dataset” registry or sitemap submission system needs to be developed.
 
 The resolver was initially inadequate to serve redirects to landing resources at scale while the Aggregator was actively retrieving all resources from PIDs in <https://geoconnex.us/sitemap.xml>, with resolution times in the 1-second range and an error rate of ~5%. To address this, replica persistent identifier databases were set up, each with its own autoscaling, load-balanced redirect server container. This cut resolution times to less than 50ms on average and the error rate to less than 0.1% during aggregator runs. In anticipation of increased usage in the future, the resolver was also put behind Cloudfront, the Amazon Web Services global Content Delivery Network, which caches requests and reduces the load on both the persistent identifier resolver and any servers that provide landing content at the redirected URLs.
 
@@ -395,6 +395,8 @@ Nabu performs two functions:
 #### Performance and future work
 
 Gleaner and Nabu were demonstrated to successfully harvest JSON-LD and load them into the triple store. The initial deployment deployed all components of the aggregator service in a single docker-compose framework on a single virtuam machine. This deployment experienced upper limit on the number of resources crawled due to the memory allocatable to the S3 data store within the framework. This was resolved by reconfiguring Gleaner and Nabu to work with a serverless S3 infrastructure (in this case, Google Cloud Storage). To fulfill two key functions of public data access and data versioning, a third capability should be finalized with Nabu: to concatenate the JSON-LD documents from a given sitemap or namespace into a single, versioned and timestamped RDF release graph for archiving and download at a publicly accessible S3-compliant object store bucket.
+
+The Aggregator service harvests URLs/URIs in a `sitemap.xml` file. In order to truly crawl through resources referenced in linked data, gleaner must be continued to generate and harvest additional `sitemap.xml` files from harvested JSON-LD. This can be accomplished by automating the generation of additional `sitemap.xml` from any URIs listed as objects of the `@id` tag in JSON-LD of harvested resources. This is possible, but was not tested. Additional configuration is required to enable this capability.
 
 ### Knowledge Graph/ Triple Store {#sec-kg}
 
