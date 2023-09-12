@@ -93,7 +93,6 @@ The rest of the report is organized as follows:
 
 [Governance](#sec-use-cases) describes the general data discovery and publication use cases, and domain use cases that were developed and how they were addressed by Geoconnex implementation efforts.
 
-
 ## Glossary {#sec-governance}
 
 API
@@ -180,19 +179,17 @@ URL
 
 ## User Research and Engagement {#sec-engagement}
 
+### Outreach
 
-### Outreach 
-
-Several direct engagements, including rounds of technical assistance in implementing Geoconnex data publication practices, were conducted with data providers (see @sec-webcont) who are represented in the [Internet of Water Coalition](https://internetofwater.org). Insights gleaned from these engagements included the need for web developer-friendly tools to ease the publication of JSON-LD from common data service platforms including CKAN, ArcGIS Enterprise/Online, and TylerTech Data & Insights (formerly Socrata). 
+Several direct engagements, including rounds of technical assistance in implementing Geoconnex data publication practices, were conducted with data providers (see @sec-webcont) who are represented in the [Internet of Water Coalition](https://internetofwater.org). Insights gleaned from these engagements included the need for web developer-friendly tools to ease the publication of JSON-LD from common data service platforms including CKAN, ArcGIS Enterprise/Online, and TylerTech Data & Insights (formerly Socrata).
 
 In addition presentations and webinars were delivered that included significant Q&A sessions for feedback from the water data community including
 
-- An [Internet of Water Webinar](https://www.youtube.com/watch?v=qIm1VpCCcLg) (December 2022)
-- A [presentation](https://westernstateswater.org/wp-content/uploads/2022/02/01_geoconnex_wswc.pptx.pdf) at the [2022 National Water Use Data Workshop](https://westernstateswater.org/events/2022-national-water-use-data-workshop/) (August 2022)
-- A [presentation](https://www.youtube.com/watch?v=zFB9R0FC6X4) at FOSS4G in Prizren (July 2023)
-- A presentation for [NSGIC](https://nsgic.org) (August 2023)
-- A second Internet of Water Webinar designed for a general public audience (August 2023)
-
+-   An [Internet of Water Webinar](https://www.youtube.com/watch?v=qIm1VpCCcLg) (December 2022)
+-   A [presentation](https://westernstateswater.org/wp-content/uploads/2022/02/01_geoconnex_wswc.pptx.pdf) at the [2022 National Water Use Data Workshop](https://westernstateswater.org/events/2022-national-water-use-data-workshop/) (August 2022)
+-   A [presentation](https://www.youtube.com/watch?v=zFB9R0FC6X4) at FOSS4G in Prizren (July 2023)
+-   A presentation for [NSGIC](https://nsgic.org) (August 2023)
+-   A second Internet of Water Webinar designed for a general public audience (August 2023)
 
 ### Interviews
 
@@ -261,7 +258,7 @@ In responding to the principal use case of the Geoconnex system, which is to pro
   "@id": "https://data.usbr.gov/catalog/8/item/878"
   "name": "Lake Mead Hoover Dam and Powerplant Intermittent Veliger Density Time Series Data",
   "description": "Measurements of quagga mussel veliger numbers from Lake Mead Hoover Dam and Powerplant. Veligers, the larval stage of dreissenid mussels, are collected with a plankton tow net and preserved with alcohol and buffer. Veligers are identified and counted under cross-polarized light microscopy. Veliger density refers to the number of veligers per cubic meter in the sampled location, as calculated from the total veliger count in the sample and the tow volume taken for sample collection.",
-  "temporalCoverage": "2013-01-01/2018-01-01"
+  "temporalCoverage": "2013-01-01/2018-01-01",
     "distribution": {
     "@type": "DataDownload",
     "name": "USBR RISE API",
@@ -304,9 +301,9 @@ The resolver is a customized fork of the open-source [YOURLS](https://yourls.org
 
 #### Performance and future work
 
-The registry is now adequate technically, however there are two areas for improvement. First, some data providers are unfamiliar with GitHub or regular expressions, and others find the process of contributing to PIDs via GitHub pull requests to be cumbersome and insufficiently automate-able. Future work should investigate the feasibility of both a more user-friendly dedicated user interface, and the possibility of allowing access to an API to request and verify the minting of PIDs. Second, contributors of regex PIDs nevertheless need a consistent way to provide a comprehensive list of every URL to the Geoconnex system so that they can be crawled. Specific guidance for creating and submitting self-hosted, or alternatively hosted sitemap.xml files will be necessary to develop. This is related to an issue that guidance for submitting dataset URIs or URLs, in addition to PIDs for specific locations may be necessary to develop so that the Geoconnex system can crawl dataset metadata that include Geoconnex references in addition to URIs for real-world features that are registered. Thus, a parallel “dataset” registry or sitemap submission system needs to be developed.
+The registry is now adequate technically, however there are two areas for improvement. First, some data providers are unfamiliar with GitHub or regular expressions, and others find the process of contributing to PIDs via GitHub pull requests to be cumbersome and insufficiently automate-able. Future work should investigate the feasibility of both a more user-friendly dedicated user interface, and the possibility of allowing access to an API to request and verify the minting of PIDs. Second, contributors of regex PIDs nevertheless need a consistent way to provide a comprehensive list of every URL to the Geoconnex system so that they can be crawled. Specific guidance for creating and submitting self-hosted, or alternatively hosted sitemap.xml files will be necessary to develop. This is related to an issue that guidance for submitting dataset URIs or URLs, in addition to PIDs for specific locations may be necessary to develop so that the Geoconnex system can crawl dataset metadata that include Geoconnex references in addition to URIs for real-world features that are registered. Thus, a parallel "dataset" registry or sitemap submission system needs to be developed.
 
-The resolver was initially inadequate to serve redirects to landing resources at scale while the Aggregator was actively retrieving all resources from PIDs in <https://geoconnex.us/sitemap.xml>, with resolution times in the 1-second range and an error rate of ~5%. To address this, replica persistent identifier databases were set up, each with its own autoscaling, load-balanced redirect server container. This cut resolution times to less than 50ms on average and the error rate to less than 0.1% during aggregator runs. In anticipation of increased usage in the future, the resolver was also put behind Cloudfront, the Amazon Web Services global Content Delivery Network, which caches requests and reduces the load on both the persistent identifier resolver and any servers that provide landing content at the redirected URLs.
+The resolver was initially inadequate to serve redirects to landing resources at scale while the Aggregator was actively retrieving all resources from PIDs in <https://geoconnex.us/sitemap.xml>, with resolution times in the 1-second range and an error rate of \~5%. To address this, replica persistent identifier databases were set up, each with its own autoscaling, load-balanced redirect server container. This cut resolution times to less than 50ms on average and the error rate to less than 0.1% during aggregator runs. In anticipation of increased usage in the future, the resolver was also put behind Cloudfront, the Amazon Web Services global Content Delivery Network, which caches requests and reduces the load on both the persistent identifier resolver and any servers that provide landing content at the redirected URLs.
 
 ### Reference Feature Server (reference.geoconnex.us) {#sec-reference}
 
@@ -371,12 +368,11 @@ Throughout engagement regarding [organizational web content](#sec-webcont), guid
 
 It was found that uptake is far more likely when JSON-LD requirements are as parsimonious as possible and reduce reliance on ontologies and vocabularies other than <https://schema.org>, which web developers are familiar with and which has robust documentation. For example, attempts to rigorously implement patterns from the [Semantic Sensor Network](https://www.w3.org/TR/vocab-ssn/) ontology found that the concepts therein, especially around Sensors, Procedures, Platforms, Deployments, and Samplings were difficult to consistently apply to the metadata that was easily available for publication from participating source data systems. Nevertheless, it was found that properties from HY_Features, GeoSPARQL, and [QUDT](https://www.qudt.org) were absolutely necessary, and properties from the [Observations Data Model 2 (ODM2) Vocabularies](http://voacbulary.odm2.org) were useful in most cases. It is plausible that more user-friendly publication and documentation of domain models would enable greater degrees of standardization. Domain models and authoritative or community vocabularies that need to be published with resolvable URIs and accessible documentation and search interfaces include:
 
-* groundwater features
-* water quality and quantity regulatory concepts (e.g. action and enforcement thresholds, beneficial use categories, water rights allocations and priorities)
-* quantity kinds and parameters
-* environmental observation and model methods
-* infrastructure properties (e.g. dams, reservoirs) and anthropogenic hydrology (e.g. conduits, culverts, levees)
-
+-   groundwater features
+-   water quality and quantity regulatory concepts (e.g. action and enforcement thresholds, beneficial use categories, water rights allocations and priorities)
+-   quantity kinds and parameters
+-   environmental observation and model methods
+-   infrastructure properties (e.g. dams, reservoirs) and anthropogenic hydrology (e.g. conduits, culverts, levees)
 
 ### Aggregator service
 
@@ -412,10 +408,9 @@ In addition, the vast majority of even highly technically skilled water data ana
 
 The following data sources were investigated to track and provide usage statistics for community linked data resources
 
-* Google Analytics
-* PID server logs
-* CDN distribution logs
-
+-   Google Analytics
+-   PID server logs
+-   CDN distribution logs
 
 #### Google Analytics
 
@@ -427,46 +422,55 @@ PID server logs provided reasonably complete metrics for hits, referrers, and da
 
 #### CDN distribution logs
 
-The Cloudfront logs provide complete information on which PIDs are being accessed, whether or not the response is forwarded from the source or the cache, but raw logs are difficult to interpret and should be visualized and/or tabulated. 
+The Cloudfront logs provide complete information on which PIDs are being accessed, whether or not the response is forwarded from the source or the cache, but raw logs are difficult to interpret and should be visualized and/or tabulated.
 
 ##### AWS CloudWatch
+
 Overall hit and error rates and data transfer volume are easily configurable metrics for AWS CloudWatch dashboards, which can provided via publicly accessible link or only to specific users. It was also possible to configure more specific metrics, such as for hits for PIDs in specific namespaces. However, each namespace needed to be configured individually. Thus, if the use case involves providing custom metrics for data contributors for their specific namespace only, AWS CloudWatch would be arduous to configure and maintain.
 
 ##### Data export
-It was relatively straightforward to export and concatenate the CloudFront logs as they were posted to an AWS S3 bucket. The complete log file could thus be concatenated on at least a daily basis using a simple shell script. The resulting file can be easily queried and analyzed with spreadsheet programs, databases, or R, Python, or other programming languages. 
+
+It was relatively straightforward to export and concatenate the CloudFront logs as they were posted to an AWS S3 bucket. The complete log file could thus be concatenated on at least a daily basis using a simple shell script. The resulting file can be easily queried and analyzed with spreadsheet programs, databases, or R, Python, or other programming languages.
 
 #### Performance and Future work
-For the simple use case of tracking access to specific Geoconnex knowledge network resources, either on an individual or aggregated by namespace basis, maintaining a data export for visualization in an R Shiny App or Python Dash App is most likely the next step to creating a publicly viewable and resource tracking system. However, this solution would not be able to track second-order links (that is, non-Geoconnex PID URLs in the linked data). Moreover, data providers wishing to track access hits to their systems that are referred via Geoconnex resources would need to use their own server logs. Moreover, in many cases they would only see that hits were referred via landing resource URLs, not the upstream PIDs, and so only reference feature referrers (from <https://reference.geoconnex.us>) could be reliably tracked. 
 
-Future work could investigate the feasibility of populating the Geoconnex CDN logs with hits to linked data. One approach would be to periodically mint special geoconnex URLs that redirect to each dataset URL detected in the knowledge graph. For example, a dataset about a specific dam might have a DOI-URL like <https://doi.org/10.1111/12234>, and landing content that includes `"schema:about":"https://geoconnex.us/ref/dams/1000001"`. The Geoconnex system could in principle add a redirect from `https://geoconnex.us/data/doi.org/10.1111/12234` to <https://doi.org/10.1111/12234>. Then, these minted URLs could serve as the primary entrypoint for linked datasets in user interfaces and information products in the Geoconnex system, such that data providers' data that is discovered via Geoconnex is likely to be accessed via a redirect from `https://geoconnex.us/data/doi.org/10.1111/12234`, hits to which could be tracked via the Geoconnex PID server. 
+For the simple use case of tracking access to specific Geoconnex knowledge network resources, either on an individual or aggregated by namespace basis, maintaining a data export for visualization in an R Shiny App or Python Dash App is most likely the next step to creating a publicly viewable and resource tracking system. However, this solution would not be able to track second-order links (that is, non-Geoconnex PID URLs in the linked data). Moreover, data providers wishing to track access hits to their systems that are referred via Geoconnex resources would need to use their own server logs. Moreover, in many cases they would only see that hits were referred via landing resource URLs, not the upstream PIDs, and so only reference feature referrers (from <https://reference.geoconnex.us>) could be reliably tracked.
+
+Future work could investigate the feasibility of populating the Geoconnex CDN logs with hits to linked data. One approach would be to periodically mint special geoconnex URLs that redirect to each dataset URL detected in the knowledge graph. For example, a dataset about a specific dam might have a DOI-URL like <https://doi.org/10.1111/12234>, and landing content that includes `"schema:about":"https://geoconnex.us/ref/dams/1000001"`. The Geoconnex system could in principle add a redirect from `https://geoconnex.us/data/doi.org/10.1111/12234` to <https://doi.org/10.1111/12234>. Then, these minted URLs could serve as the primary entrypoint for linked datasets in user interfaces and information products in the Geoconnex system, such that data providers' data that is discovered via Geoconnex is likely to be accessed via a redirect from `https://geoconnex.us/data/doi.org/10.1111/12234`, hits to which could be tracked via the Geoconnex PID server.
 
 ## Use Cases
 
 Below both a highly general use case is described, as well as a specific use case involving the discovery and integration of hydrologically related observed and modeled data.
 
-### General use case 
+### General use case
 
-The general geoconnex use case is essentially the same as the "Internet of Water" use case articulated in Internet of Water Aspen Institute Report^[https://www.aspeninstitute.org/publications/internet-of-water/] and summarized in the SELFIE Engineering Report^[<https://docs.ogc.org/per/20-067.html#_us_internet_of_water_distributed_data_and_observations>]. 
+The general geoconnex use case is essentially the same as the "Internet of Water" use case articulated in Internet of Water Aspen Institute Report[^3] and summarized in the SELFIE Engineering Report[^4].
+
+[^3]: https://www.aspeninstitute.org/publications/internet-of-water/
+
+[^4]: <https://docs.ogc.org/per/20-067.html#_us_internet_of_water_distributed_data_and_observations>
 
 #### User Story
-As a user of water data, I need to discover and access water information relevant to the environmental feature I care about from all the organizations that hold data about it, so I don’t have to have special knowledge to access some information and so I don’t miss some potentially relevant information.^[Reproduced from the [SELFIE engineering report](https://docs.ogc.org/per/20-067.html#_user_story)]
+
+As a user of water data, I need to discover and access water information relevant to the environmental feature I care about from all the organizations that hold data about it, so I don't have to have special knowledge to access some information and so I don't miss some potentially relevant information.[^5]
+
+[^5]: Reproduced from the [SELFIE engineering report](https://docs.ogc.org/per/20-067.html#_user_story)
 
 #### Datasets and sources
 
-* USGS Reference Hydrography
+-   USGS Reference Hydrography
 
-* State and local data and observations
+-   State and local data and observations
 
-* University consortia aggregated data services
+-   University consortia aggregated data services
 
-* Federal aggregated data and services
+-   Federal aggregated data and services
 
-* Nongovernmental aggregated data and services
-
+-   Nongovernmental aggregated data and services
 
 #### Conceptual Demonstration
 
-The Geoconnex system is ultimately designed to meet this highly general use case. The overall architecture envisions a federated system of data producers that all participate by publishing landing content that references [Community Reference Features](#sec-reference), and registering URIs and/or PIDS for that content with the [persistent identifier registry](#sec-registry). The combined landing content can then be organized into a [knowledge graph](#sec-kg) that is made publicly accessible. Diverse data discovery workflows can be accommodated via SPARQL query to the knowledge graph or instantiated via SQL-enabled data stores or tabular and geospatial data files created from the knowledge graph. 
+The Geoconnex system is ultimately designed to meet this highly general use case. The overall architecture envisions a federated system of data producers that all participate by publishing landing content that references [Community Reference Features](#sec-reference), and registering URIs and/or PIDS for that content with the [persistent identifier registry](#sec-registry). The combined landing content can then be organized into a [knowledge graph](#sec-kg) that is made publicly accessible. Diverse data discovery workflows can be accommodated via SPARQL query to the knowledge graph or instantiated via SQL-enabled data stores or tabular and geospatial data files created from the knowledge graph.
 
 A simple example of discovering streamgages from all participating organizations that monitor a specific river is elaborated below:
 
@@ -538,7 +542,9 @@ The resulting GeoJSON response for that gage from <https://reference.geoconnex.u
 
 The GeoJSON representation of the `mainstem_uri` can be retrieved easily and a second GeoJSON would be simple to construct from the array at the node `gages_same_mainstem`.
 
-A visual representation of this example is available in a [web application](https://gis.cgs.earth/portal/apps/opsdashboard/index.html#/0e113bea7c0542c18adef00d910c330e)^[https://gis.cgs.earth/portal/apps/opsdashboard/index.html#/0e113bea7c0542c18adef00d910c330e]. The workflow is as follows:
+A visual representation of this example is available in a [web application](https://gis.cgs.earth/portal/apps/opsdashboard/index.html#/0e113bea7c0542c18adef00d910c330e)[^6]. The workflow is as follows:
+
+[^6]: https://gis.cgs.earth/portal/apps/opsdashboard/index.html#/0e113bea7c0542c18adef00d910c330e
 
 First, an area of interest can be navigated to on a web map that displays mainstem rivers and all known surface water monitoring locations:
 
@@ -552,29 +558,26 @@ Second, any monitoring location can be selected. This results in the view being 
 
 At this point, the technical baseline has been established to meet a wide variety of data discovery and access use cases. Reasonable next steps might include:
 
-* incorporating next-generation USGS hydrography products (e.g. 3DHP mainstems) into reference feature collections
-* creating and publishing domain models for specific feature types (e.g. anthropogenic water features)
-* scaling participation in the system from data providers through targeted implementation of domain use cases that actively use the Geoconnex infrastructure
-* creating institutional mechanisms to steward reference feature collections
-
+-   incorporating next-generation USGS hydrography products (e.g. 3DHP mainstems) into reference feature collections
+-   creating and publishing domain models for specific feature types (e.g. anthropogenic water features)
+-   scaling participation in the system from data providers through targeted implementation of domain use cases that actively use the Geoconnex infrastructure
+-   creating institutional mechanisms to steward reference feature collections
 
 ### Discovering, Distinguishing, and Integrating Hydrologically Relevant Observed and Modeled Datasets
 
 #### Description
-This use case involves a hydrologist a who aims to integrate historical observed and modeled streamflow data for a specific hydrologic feature or region in order to validate a novel model under development and compare it to other models and observations relevant to the same time and place. 
 
+This use case involves a hydrologist a who aims to integrate historical observed and modeled streamflow data for a specific hydrologic feature or region in order to validate a novel model under development and compare it to other models and observations relevant to the same time and place.
 
 #### User Story
-As a Hydrologist,
-I want to integrate all observed and modeled data for a specific hydrologic feature or region,
-so that I can analyze all available models together and compare them to observed data to identify patterns, trends, and discrepancies and make recommendations for improving hydrologic models or data collection processes.
+
+As a Hydrologist, I want to integrate all observed and modeled data for a specific hydrologic feature or region, so that I can analyze all available models together and compare them to observed data to identify patterns, trends, and discrepancies and make recommendations for improving hydrologic models or data collection processes.
 
 #### Conceptual Demonstration
 
 The User first identifies the hydrologic feature or region of interest, perhaps a polygon for a custom-delineated area for which they developed their novel model.
 
 ![Observed/Modeled Use Case example area of interest](images/fig8.png)
-
 
 The User could then query the geoconnex reference feature server for all mainstem rivers within that polygon using a CQL filter:
 
@@ -778,12 +781,11 @@ Meanwhile the NOAA National Water Model could publish its model at the scale of 
 }
 ```
 
-The Geoconnex system in this example scenario would have harvested both of these documents, and thus there would be two monitoring locations referenced to the same mainstem via the `hyf:linearElement` property from HY_Features. Each of the datasets cover the same variable (streamflow) over overlapping `temporalCoverage`. The USGS dataset uses a `measurementTechnique` tag of `observation` and the NOAA dataset uses a `measurementTechnique` tag of `model`, while both have more detailed references to the specific data generating procedures specified in the `measurementMethod` block. `measurementTechnique` is designed to be a high level tag to delineate between broad categories of data generation methods for data cataloging and filtering purposes, with a [limited codelist](https://internetofwater.github.io/geoconnex-guidance/#sec-measurementTechnique). 
+The Geoconnex system in this example scenario would have harvested both of these documents, and thus there would be two monitoring locations referenced to the same mainstem via the `hyf:linearElement` property from HY_Features. Each of the datasets cover the same variable (streamflow) over overlapping `temporalCoverage`. The USGS dataset uses a `measurementTechnique` tag of `observation` and the NOAA dataset uses a `measurementTechnique` tag of `model`, while both have more detailed references to the specific data generating procedures specified in the `measurementMethod` block. `measurementTechnique` is designed to be a high level tag to delineate between broad categories of data generation methods for data cataloging and filtering purposes, with a [limited codelist](https://internetofwater.github.io/geoconnex-guidance/#sec-measurementTechnique).
 
 The following SPARQL query would with precision identify both datasets about streamflow, one with observed and one with modeled data, about one of the two mainstems from a larger universe of data for a variety of variables from many monitoring locations that are within in the initial area of interest, within a time period of interest.
 
-
-```sparql
+``` sparql
 PREFIX hyf: <https://www.opengis.net/def/schema/hy_features/hyf/>
 PREFIX qudt: <http://qudt.org/schema/qudt/>
 PREFIX qudt-quantkinds: <http://qudt.org/vocab/quantitykind/>
@@ -826,19 +828,16 @@ WHERE {
 
 The resulting table would look like:
 
-| dataset | dataDownloadURL | measurementTechnique | measurementMethodURL | dataProvider | dataProviderURL | timeRangeStart | timeRangeEnd |
-|---------|-----------------|----------------------|----------------------|--------------|------------------|----------------|--------------|
-| Stream Flow Short-Range forecast from ReachID 8896260 | [NOAA NWM Data](https://water.noaa.gov/map?center_x=-8801823.929280883&center_y=4286794.076255304&lat=35.89683945221153&lon=-79.06654830816721&zoom=15&reachID=8896308&reachName=Morgan Creek&forecastChart=true&variable=streamflow&forecastType=analysis_assim&forecastType=short_range) | model | [NOAA National Water Model Documentation](https://water.noaa.gov/about/nwm) | NOAA National Water Model | [NOAA National Water Model Website](https://water.noaa.gov/about/nwm) | 2016-06-30 | (ongoing) |
-| Discharge data from USGS Monitoring Location 08282300 | [USGS Instantaneous Values Service](https://waterservices.usgs.gov/nwis/iv/?sites=2408909&parameterCd=00060&format=rdb) , [USGS SensorThings API](https://labs.waterdata.usgs.gov/sta/v1.1/Datastreams('0adb31f7852e4e1c9a778a85076ac0cf')?$expand=Thing,Observations) | observation | [Discharge Measurements at Gaging Stations](https://doi.org/10.3133/tm3A8) | U.S. Geological Survey Water Data for the Nation | [USGS Water Data for the Nation Website](https://waterdata.usgs.gov) | 2014-06-30 | (ongoing) |
+| dataset                                               | dataDownloadURL                                                                                                                                                                                                                                                                              | measurementTechnique | measurementMethodURL                                                        | dataProvider                                     | dataProviderURL                                                       | timeRangeStart | timeRangeEnd |
+|---------|---------|---------|---------|---------|---------|---------|---------|
+| Stream Flow Short-Range forecast from ReachID 8896260 | [NOAA NWM Data](https://water.noaa.gov/map?center_x=-8801823.929280883&center_y=4286794.076255304&lat=35.89683945221153&lon=-79.06654830816721&zoom=15&reachID=8896308&reachName=Morgan%20Creek&forecastChart=true&variable=streamflow&forecastType=analysis_assim&forecastType=short_range) | model                | [NOAA National Water Model Documentation](https://water.noaa.gov/about/nwm) | NOAA National Water Model                        | [NOAA National Water Model Website](https://water.noaa.gov/about/nwm) | 2016-06-30     | (ongoing)    |
+| Discharge data from USGS Monitoring Location 08282300 | [USGS Instantaneous Values Service](https://waterservices.usgs.gov/nwis/iv/?sites=2408909&parameterCd=00060&format=rdb) , [USGS SensorThings API](https://labs.waterdata.usgs.gov/sta/v1.1/Datastreams('0adb31f7852e4e1c9a778a85076ac0cf')?$expand=Thing,Observations)                       | observation          | [Discharge Measurements at Gaging Stations](https://doi.org/10.3133/tm3A8)  | U.S. Geological Survey Water Data for the Nation | [USGS Water Data for the Nation Website](https://waterdata.usgs.gov)  | 2014-06-30     | (ongoing)    |
 
 #### Next steps
 
 This use case demonstrates the value of the Geoconnex approach, since highly relevant data could be precisely found without prior knowledge of any contributor data system. However, the system does depend on consistent and widespread method specification and feature of interest tagging. Indexes for methods and features of interest and easy, automated ways to add these metadata elements to source data systems will likely be necessary for uptake by data providers, and should be investigated for feasibility in future phases of the Geoconnex project.
 
-
-
-
-## Governance {#sec-governance}
+## Governance
 
 ### Functional Requirements Research
 
